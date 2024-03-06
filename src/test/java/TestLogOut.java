@@ -1,35 +1,29 @@
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-
 import static org.junit.Assert.*;
 
-public class TestLogOut {
+public class TestLogOut extends Driver {
     String password = "123456";
     String email = "AnnaStarodubtseva@mail.ru";
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
     }
+    @After
+    public void closeBrowser() {
+        driver.quit();
+    }
     @Test
     public void checkLogOut() { testLogOut(); }
     @Step("Go to your personal account")
     public void testLogOut() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         HomePage objHomePage = new HomePage(driver);
         LoginPage objLoginPage = new LoginPage(driver);
         PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
@@ -45,7 +39,5 @@ public class TestLogOut {
                 .until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton));
 
         assertTrue(objLoginPage.buttonLogin());
-
-        driver.quit();
     }
 }

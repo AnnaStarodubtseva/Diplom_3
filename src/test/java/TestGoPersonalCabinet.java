@@ -1,30 +1,25 @@
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
 import static org.junit.Assert.*;
-import org.openqa.selenium.chrome.ChromeOptions;
-
-public class TestGoPersonalCabinet {
+public class TestGoPersonalCabinet extends Driver {
     String password = "123456";
     String email = "AnnaStarodubtseva@mail.ru";
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
     }
+    @After
+    public void closeBrowser() {
+        driver.quit();
+    }
     @Test
     public void checkGoPersonalCabinet() { testGoPersonalCabinet(); }
     @Step("Go to your personal account")
     public void testGoPersonalCabinet() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         HomePage objHomePage = new HomePage(driver);
         LoginPage objLoginPage = new LoginPage(driver);
         PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
@@ -37,7 +32,5 @@ public class TestGoPersonalCabinet {
         objPersonalCabinet.clickPersonalCabinetButton();
 
         assertEquals ("В этом разделе вы можете изменить свои персональные данные", objPersonalCabinet.textPagePersonalCabinet());
-
-        driver.quit();
     }
 }

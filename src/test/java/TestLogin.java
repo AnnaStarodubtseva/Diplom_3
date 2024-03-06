@@ -1,22 +1,23 @@
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import static org.junit.Assert.assertTrue;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-import org.openqa.selenium.chrome.ChromeOptions;
 
-
-public class TestLogin {
+public class TestLogin extends Driver {
     String password = "123456";
     String email = "AnnaStarodubtseva@mail.ru";
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
+    }
+    @After
+    public void closeBrowser() {
+        driver.quit();
     }
     @Test
     public void checkLoginOnHomePage() { testLoginOnHomePage(); }
@@ -28,13 +29,7 @@ public class TestLogin {
     public void checkLoginPasswordRecovery() { testLoginPasswordRecovery(); }
     @Step("Login using the “Log in to your account” button on the main page")
     public void testLoginOnHomePage() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         HomePage objHomePage = new HomePage(driver);
         LoginPage objLoginPage = new LoginPage(driver);
         PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
@@ -45,18 +40,10 @@ public class TestLogin {
         objLoginPage.enterPassword(password);
         objLoginPage.clickLogin();
         assertTrue(objHomePage.signOrder());
-
-        driver.quit();
     }
     @Step("Login through the “Personal Cabinet” button")
     public void testLoginPersonalCabinet() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         HomePage objHomePage = new HomePage(driver);
         LoginPage objLoginPage = new LoginPage(driver);
         PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
@@ -67,18 +54,10 @@ public class TestLogin {
         objLoginPage.enterPassword(password);
         objLoginPage.clickLogin();
         assertTrue(objHomePage.signOrder());
-
-        driver.quit();
     }
     @Step("Login via the button in the registration form")
     public void testLoginRegistrationForm() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         LoginPage objLoginPage = new LoginPage(driver);
         HomePage objHomePage = new HomePage(driver);
         RegistrPage objRegistrPage = new RegistrPage(driver);
@@ -98,21 +77,12 @@ public class TestLogin {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(HomePage.createOrderButton));
         assertTrue(objHomePage.signOrder());
-
-        driver.quit();
     }
     @Step("Login via the button in the password recovery form")
     public void testLoginPasswordRecovery() {
-        //Драйвер для яндекса
-        // System.setProperty("webdriver.chrome.driver", "src/test/resources/Google Chrome");
-        // ChromeOptions options = new ChromeOptions();
-        // options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
-        // WebDriver driver = new ChromeDriver(options);
-
-        WebDriver driver = new ChromeDriver();
+        webDriver();
         HomePage objHomePage = new HomePage(driver);
         LoginPage objLoginPage = new LoginPage(driver);
-        PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
         PasswordRecovery objPasswordRecovery = new PasswordRecovery(driver);
 
         driver.get(HomePage.URL_HOME);
@@ -125,7 +95,5 @@ public class TestLogin {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(HomePage.createOrderButton));
         assertTrue(objHomePage.signOrder());
-
-        driver.quit();
     }
 }
