@@ -10,26 +10,33 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class TestRegistration extends Driver {
+    RegistrPage objRegistrPage;
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
+        webDriver();
+        objRegistrPage = new RegistrPage(driver);
     }
     @After
     public void closeBrowser() {
         driver.quit();
     }
     @Test
-    public void checkSuccessfulRegistration() { testSuccessfulRegistration(); }
+    public void checkSuccessfulRegistration() {
+        testSuccessfulRegistration();
+        assertTrue(objRegistrPage.signEnter());
+    }
     @Test
-    public void checkRegistrationWithError() { testRegistrationWithError(); }
+    public void checkRegistrationWithError() {
+        testRegistrationWithError();
+        assertEquals ("Некорректный пароль", objRegistrPage.textError());
+    }
 
     @Step("Successful registration")
     public void testSuccessfulRegistration() {
-        webDriver();
         driver.get(HomePage.URL_HOME);
         CreateUser user = CreateUser.getDataUser(6);
 
-        RegistrPage objRegistrPage = new RegistrPage(driver);
         objRegistrPage.formRegistr();
         objRegistrPage.enterName(user.getName());
         objRegistrPage.enterEmail(user.getEmail());
@@ -37,21 +44,16 @@ public class TestRegistration extends Driver {
         objRegistrPage.clickRegistr();
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(RegistrPage.enterButton));
-        assertTrue(objRegistrPage.signEnter());
     }
     @Step("Registration with error for incorrect password")
     public void testRegistrationWithError() {
-        webDriver();
         driver.get(HomePage.URL_HOME);
         CreateUser user = CreateUser.getDataUser(5);
 
-        RegistrPage objRegistrPage = new RegistrPage(driver);
         objRegistrPage.formRegistr();
         objRegistrPage.enterName(user.getName());
         objRegistrPage.enterEmail(user.getEmail());
         objRegistrPage.enterPassword(user.getPassword());
         objRegistrPage.clickRegistr();
-
-        assertEquals ("Некорректный пароль", objRegistrPage.textError());
     }
 }

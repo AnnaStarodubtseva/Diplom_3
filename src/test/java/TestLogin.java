@@ -11,56 +11,61 @@ import java.time.Duration;
 public class TestLogin extends Driver {
     String password = "123456";
     String email = "AnnaStarodubtseva@mail.ru";
+    HomePage objHomePage;
+    LoginPage objLoginPage;
+    RegistrPage objRegistrPage;
+    PasswordRecovery objPasswordRecovery;
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
+        webDriver();
+        objHomePage = new HomePage(driver);
+        objLoginPage = new LoginPage(driver);
+        objRegistrPage = new RegistrPage(driver);
+        objPasswordRecovery = new PasswordRecovery(driver);
     }
     @After
     public void closeBrowser() {
         driver.quit();
     }
     @Test
-    public void checkLoginOnHomePage() { testLoginOnHomePage(); }
+    public void checkLoginOnHomePage() {
+        testLoginOnHomePage();
+        assertTrue(objHomePage.signOrder());
+    }
     @Test
-    public void checkLoginPersonalCabinet() { testLoginPersonalCabinet(); }
+    public void checkLoginPersonalCabinet() {
+        testLoginPersonalCabinet();
+        assertTrue(objHomePage.signOrder());
+    }
     @Test
-    public void checkLoginRegistrationForm() { testLoginRegistrationForm(); }
+    public void checkLoginRegistrationForm() {
+        testLoginRegistrationForm();
+        assertTrue(objHomePage.signOrder());
+    }
     @Test
-    public void checkLoginPasswordRecovery() { testLoginPasswordRecovery(); }
+    public void checkLoginPasswordRecovery() {
+        testLoginPasswordRecovery();
+        assertTrue(objHomePage.signOrder());
+    }
     @Step("Login using the “Log in to your account” button on the main page")
     public void testLoginOnHomePage() {
-        webDriver();
-        HomePage objHomePage = new HomePage(driver);
-        LoginPage objLoginPage = new LoginPage(driver);
-        PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
-
         driver.get(HomePage.URL_HOME);
         objHomePage.clickLoginOnHomePage();
         objLoginPage.enterEmail(email);
         objLoginPage.enterPassword(password);
         objLoginPage.clickLogin();
-        assertTrue(objHomePage.signOrder());
     }
     @Step("Login through the “Personal Cabinet” button")
     public void testLoginPersonalCabinet() {
-        webDriver();
-        HomePage objHomePage = new HomePage(driver);
-        LoginPage objLoginPage = new LoginPage(driver);
-        PersonalCabinet objPersonalCabinet = new PersonalCabinet(driver);
-
         driver.get(HomePage.URL_HOME);
         objHomePage.clickPersonalCabinet();
         objLoginPage.enterEmail(email);
         objLoginPage.enterPassword(password);
         objLoginPage.clickLogin();
-        assertTrue(objHomePage.signOrder());
     }
     @Step("Login via the button in the registration form")
     public void testLoginRegistrationForm() {
-        webDriver();
-        LoginPage objLoginPage = new LoginPage(driver);
-        HomePage objHomePage = new HomePage(driver);
-        RegistrPage objRegistrPage = new RegistrPage(driver);
         CreateUser user = CreateUser.getDataUser(6);
 
         driver.get(HomePage.URL_HOME);
@@ -76,15 +81,9 @@ public class TestLogin extends Driver {
         objLoginPage.clickLogin();
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(HomePage.createOrderButton));
-        assertTrue(objHomePage.signOrder());
     }
     @Step("Login via the button in the password recovery form")
     public void testLoginPasswordRecovery() {
-        webDriver();
-        HomePage objHomePage = new HomePage(driver);
-        LoginPage objLoginPage = new LoginPage(driver);
-        PasswordRecovery objPasswordRecovery = new PasswordRecovery(driver);
-
         driver.get(HomePage.URL_HOME);
         objHomePage.clickLoginOnHomePage();
         objLoginPage.clickPasswordRecovery();
@@ -94,6 +93,5 @@ public class TestLogin extends Driver {
         objLoginPage.clickLogin();
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(HomePage.createOrderButton));
-        assertTrue(objHomePage.signOrder());
     }
 }
