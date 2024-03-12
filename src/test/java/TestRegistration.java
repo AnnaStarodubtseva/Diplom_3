@@ -11,10 +11,12 @@ import java.time.Duration;
 
 public class TestRegistration extends Driver {
     RegistrPage objRegistrPage;
+    CreateUser user;
     @Before
     public void startUp() {
         WebDriverManager.chromedriver().setup();
         webDriver();
+        driver.get(HomePage.URL_HOME);
         objRegistrPage = new RegistrPage(driver);
     }
     @After
@@ -23,33 +25,20 @@ public class TestRegistration extends Driver {
     }
     @Test
     public void checkSuccessfulRegistration() {
-        testSuccessfulRegistration();
+        user = CreateUser.getDataUser(6);
+        fillRegistrationForm();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(RegistrPage.enterButton));
         assertTrue(objRegistrPage.signEnter());
     }
     @Test
     public void checkRegistrationWithError() {
-        testRegistrationWithError();
+        user = CreateUser.getDataUser(5);
+        fillRegistrationForm();
         assertEquals ("Некорректный пароль", objRegistrPage.textError());
     }
-
-    @Step("Successful registration")
-    public void testSuccessfulRegistration() {
-        driver.get(HomePage.URL_HOME);
-        CreateUser user = CreateUser.getDataUser(6);
-
-        objRegistrPage.formRegistr();
-        objRegistrPage.enterName(user.getName());
-        objRegistrPage.enterEmail(user.getEmail());
-        objRegistrPage.enterPassword(user.getPassword());
-        objRegistrPage.clickRegistr();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(RegistrPage.enterButton));
-    }
-    @Step("Registration with error for incorrect password")
-    public void testRegistrationWithError() {
-        driver.get(HomePage.URL_HOME);
-        CreateUser user = CreateUser.getDataUser(5);
-
+    @Step("Fill out the registration form")
+    public void fillRegistrationForm() {
         objRegistrPage.formRegistr();
         objRegistrPage.enterName(user.getName());
         objRegistrPage.enterEmail(user.getEmail());

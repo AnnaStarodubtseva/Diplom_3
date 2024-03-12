@@ -15,6 +15,7 @@ public class TestGoConstructorAndLogo extends Driver {
     public void startUp() {
         WebDriverManager.chromedriver().setup();
         webDriver();
+        driver.get(HomePage.URL_HOME);
         objHomePage = new HomePage(driver);
         objLoginPage = new LoginPage(driver);
         objPersonalCabinet = new PersonalCabinet(driver);
@@ -25,19 +26,18 @@ public class TestGoConstructorAndLogo extends Driver {
     }
     @Test
     public void checkGoConstructor() {
-        testGoPersonalCabinet();
+        goPersonalCabinet();
         objPersonalCabinet.clickConstructor();
         assertTrue(objHomePage.signOrder());
     }
     @Test
     public void checkGoLogo() {
-        testGoPersonalCabinet();
+        goPersonalCabinet();
         objPersonalCabinet.clickLogo();
         assertTrue(objHomePage.signOrder());
     }
     @Step("Login to your Personal Account")
-    public void testGoPersonalCabinet() {
-        driver.get(HomePage.URL_HOME);
+    public void goPersonalCabinet() {
         objHomePage.clickPersonalCabinet();
         objLoginPage.enterEmail(email);
         objLoginPage.enterPassword(password);

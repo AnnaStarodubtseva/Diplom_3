@@ -24,24 +24,16 @@ public class HomePage {
     public void clickSauces() {
         driver.findElement(By.xpath(".//span[(text() = 'Соусы')]")).click();
     }
-    // проверяем наличие надписи "Соусы"
-    public  boolean signSauces() {
-        return driver.findElement(By.xpath(".//h2[(text() = 'Соусы')]")).isDisplayed();
-    }
     // кликаем кнопку "Начинки"
     public void clickFillings() {
         driver.findElement(By.xpath(".//span[(text() = 'Начинки')]")).click();
     }
-    // проверяем наличие надписи "Начинки"
-    public  boolean signFillings() {
-        return driver.findElement(By.xpath(".//h2[(text() = 'Начинки')]")).isDisplayed();
-    }
     // кликаем кнопку "Булки"
     public void clickRolls() {
-        driver.findElement(By.xpath(".//span[(text() = 'Булки')]")).click();
+        driver.findElement(By.xpath(".//span[text() = 'Булки']")).click();
     }
-    // проверяем наличие надписи "Булки"
-    public  boolean signRolls() {
-        return driver.findElement(By.xpath(".//h2[(text() = 'Булки')]")).isDisplayed();
+    // получаем текст вкладки меню
+    public String getMenuText() {
+        return driver.findElement(By.xpath("//div[contains(@class,'tab_tab__1SPyG tab_tab_type_current__2BEPc')]")).getText();
     }
 }

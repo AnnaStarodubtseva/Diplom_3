@@ -2,7 +2,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.qameta.allure.Step;
 import static org.junit.Assert.*;
 
 public class TestGoSections extends Driver {
@@ -11,6 +10,7 @@ public class TestGoSections extends Driver {
     public void startUp() {
         WebDriverManager.chromedriver().setup();
         webDriver();
+        driver.get(HomePage.URL_HOME);
         objHomePage = new HomePage(driver);
     }
     @After
@@ -19,29 +19,18 @@ public class TestGoSections extends Driver {
     }
     @Test
     public void checkGoSauces() {
-        testGoSauces();
-        assertTrue(objHomePage.signSauces());
+        objHomePage.clickSauces();
+        assertEquals("Соусы", objHomePage.getMenuText());
     }
     @Test
     public void checkGoFillings() {
-        testGoFillings();
-        assertTrue(objHomePage.signFillings());
+        objHomePage.clickFillings();
+        assertEquals("Начинки", objHomePage.getMenuText());
     }
     @Test
     public void checkGoRolls() {
-        testGoFillings();
-        assertTrue(objHomePage.signFillings());
-        objHomePage.clickRolls();
-        assertTrue(objHomePage.signRolls());
-    }
-    @Step("Go to section Sauces")
-    public void testGoSauces() {
-        driver.get(HomePage.URL_HOME);
         objHomePage.clickSauces();
-    }
-    @Step("Go to section Fillings")
-    public void testGoFillings() {
-        driver.get(HomePage.URL_HOME);
-        objHomePage.clickFillings();
+        objHomePage.clickRolls();
+        assertEquals("Булки", objHomePage.getMenuText());
     }
 }
